@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>register/login and logout</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Poppins',sans-serif;
+    }
+
+    body{
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:linear-gradient(135deg,#141e30,#243b55);
+      overflow:hidden;
+    }
+
+    /* Background Glow */
+    body::before{
+      content:'';
+      position:absolute;
+      width:350px;
+      height:350px;
+      background:#00d4ff;
+      border-radius:50%;
+      top:-100px;
+      left:-100px;
+      filter:blur(120px);
+      opacity:0.5;
+    }
+
+    body::after{
+      content:'';
+      position:absolute;
+      width:350px;
+      height:350px;
+      background:#ff00c8;
+      border-radius:50%;
+      bottom:-100px;
+      right:-100px;
+      filter:blur(120px);
+      opacity:0.5;
+    }
+
+    .container{
+      position:relative;
+      width:380px;
+      background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.15);
+      backdrop-filter:blur(18px);
+      padding:40px;
+      border-radius:25px;
+      box-shadow:0 8px 32px rgba(0,0,0,0.3);
+      z-index:1;
+    }
+
+    .title{
+      text-align:center;
+      color:#fff;
+      font-size:30px;
+      margin-bottom:25px;
+      font-weight:600;
+    }
+
+    .input-box{
+      margin-bottom:18px;
+    }
+
+    .input-box input{
+      width:100%;
+      padding:14px 18px;
+      border:none;
+      outline:none;
+      border-radius:12px;
+      background:rgba(255,255,255,0.12);
+      color:#fff;
+      font-size:15px;
+      border:1px solid rgba(255,255,255,0.15);
+      transition:0.3s;
+    }
+
+    .input-box input::placeholder{
+      color:#ddd;
+    }
+
+    .input-box input:focus{
+      border-color:#00d4ff;
+      box-shadow:0 0 10px rgba(0,212,255,0.5);
+    }
+
+    .btn{
+      width:100%;
+      padding:14px;
+      border:none;
+      border-radius:12px;
+      background:linear-gradient(45deg,#00d4ff,#0066ff);
+      color:#fff;
+      font-size:16px;
+      font-weight:600;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    .btn:hover{
+      transform:translateY(-2px);
+      box-shadow:0 8px 20px rgba(0,212,255,0.4);
+    }
+
+    .bottom-text{
+      text-align:center;
+      margin-top:18px;
+      color:#eee;
+      font-size:14px;
+    }
+
+    .bottom-text span{
+      color:#00d4ff;
+      cursor:pointer;
+      font-weight:600;
+    }
+
+    .page{
+      display:none;
+      animation:fade 0.4s ease;
+    }
+
+    .active{
+      display:block;
+    }
+
+    @keyframes fade{
+      from{
+        opacity:0;
+        transform:translateY(20px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    .welcome{
+      text-align:center;
+      color:white;
+    }
+
+    .welcome h2{
+      font-size:30px;
+      margin-bottom:10px;
+    }
+
+    .welcome p{
+      color:#ddd;
+      margin-bottom:25px;
+    }
+
+    .message{
+      text-align:center;
+      margin-bottom:15px;
+      color:#00ffae;
+      font-size:14px;
+    }
+
+    .error{
+      color:#ff6b6b;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- LOGIN PAGE -->
+    <div class="page active" id="loginPage">
+
+      <h2 class="title">Login</h2>
+
+      <div class="message" id="loginMessage"></div>
+
+      <div class="input-box">
+        <input type="email" id="loginEmail" placeholder="Enter Email">
+      </div>
+
+      <div class="input-box">
+        <input type="password" id="loginPassword" placeholder="Enter Password">
+      </div>
+
+      <button class="btn" onclick="loginUser()">
+        Login
+      </button>
+
+      <div class="bottom-text">
+        Don't have an account?
+        <span onclick="showPage('registerPage')">Register</span>
+      </div>
+
+    </div>
+
+
+    <!-- REGISTER PAGE -->
+    <div class="page" id="registerPage">
+
+      <h2 class="title">Register</h2>
+
+      <div class="message" id="registerMessage"></div>
+
+      <div class="input-box">
+        <input type="text" id="registerName" placeholder="Full Name">
+      </div>
+
+      <div class="input-box">
+        <input type="email" id="registerEmail" placeholder="Email Address">
+      </div>
+
+      <div class="input-box">
+        <input type="password" id="registerPassword" placeholder="Create Password">
+      </div>
+
+      <button class="btn" onclick="registerUser()">
+        Create Account
+      </button>
+
+      <div class="bottom-text">
+        Already have an account?
+        <span onclick="showPage('loginPage')">Login</span>
+      </div>
+
+    </div>
+
+
+    <!-- HOME PAGE -->
+    <div class="page" id="homePage">
+
+      <div class="welcome">
+
+        <h2>Welcome 🎉</h2>
+
+        <p id="welcomeText"></p>
+
+        <button class="btn" onclick="logoutUser()">
+          Logout
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    // STORE USER DATA
+    let savedName = "";
+    let savedEmail = "";
+    let savedPassword = "";
+
+
+
+    // SHOW PAGE FUNCTION
+    function showPage(pageId){
+
+      let pages = document.querySelectorAll('.page');
+
+      pages.forEach(page => {
+        page.classList.remove('active');
+      });
+
+      document.getElementById(pageId).classList.add('active');
+    }
+
+
+
+    // REGISTER FUNCTION
+    function registerUser(){
+
+      let name = document.getElementById("registerName").value;
+      let email = document.getElementById("registerEmail").value;
+      let password = document.getElementById("registerPassword").value;
+
+      let message = document.getElementById("registerMessage");
+
+      if(name === "" || email === "" || password === ""){
+
+        message.innerHTML = "Please fill all fields";
+        message.classList.add("error");
+
+      }else{
+
+        savedName = name;
+        savedEmail = email;
+        savedPassword = password;
+
+        message.innerHTML = "Registration Successful ✔️";
+        message.classList.remove("error");
+
+        setTimeout(() => {
+
+          showPage('loginPage');
+
+        }, 1000);
+      }
+    }
+
+
+
+    // LOGIN FUNCTION
+    function loginUser(){
+
+      let email = document.getElementById("loginEmail").value;
+      let password = document.getElementById("loginPassword").value;
+
+      let message = document.getElementById("loginMessage");
+
+      if(email === savedEmail && password === savedPassword){
+
+        document.getElementById("welcomeText").innerHTML =
+        "Hello, " + savedName + " 👋";
+
+        message.innerHTML = "";
+
+        showPage('homePage');
+
+      }else{
+
+        message.innerHTML = "Invalid Email or Password";
+        message.classList.add("error");
+      }
+    }
+
+
+
+    // LOGOUT FUNCTION
+    function logoutUser(){
+
+      document.getElementById("loginEmail").value = "";
+      document.getElementById("loginPassword").value = "";
+
+      showPage('loginPage');
+    }
+
+  </script>
+
+</body>
+</html>
